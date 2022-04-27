@@ -13,8 +13,9 @@ class Usuario {
     }
     
     countMascotas() {
-        let cantidad = this.mascotas.length
-        return cantidad;
+        /* let cantidad = this.mascotas.length
+        return cantidad; */
+        return this.mascotas.length
     }
     getBookNames() {
         let nombresLibros = [];
