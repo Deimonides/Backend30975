@@ -17,6 +17,23 @@ class Contenedor {
         }
     }
     
+    async getRandom() { 
+        try {
+            let archivo = this.archivo;
+            const strProductos = await fs.promises.readFile( archivo, 'utf-8' )
+            const arrProductos = JSON.parse(strProductos);
+            const longitud = arrProductos.length
+                //console.log(`longitud: `, longitud);
+            const random = (Math.round( Math.random() * (longitud-1)))
+                //console.log(`random: `, random);
+            const prodRnd = arrProductos[random];
+            return prodRnd
+        }
+        catch (error) {
+            console.error(error.message)
+        }
+    }
+    
     async save(arrNuevoProducto){
         let archivo = this.archivo;
         let arrProductos = [];
@@ -27,8 +44,6 @@ class Contenedor {
         arrNuevoProducto.id = nuevoId;
         arrProductos = arrProductos.concat(arrNuevoProducto)
         strProductos = JSON.stringify(arrProductos, null, 2);
-        
-        // GRABAR TODOS LOS PRODUCTOS
         await fs.promises.writeFile(archivo, strProductos) 
         console.log(`El nuevo producto ${arrNuevoProducto.title} se grabó con el id `, nuevoId);       
         return nuevoId;
@@ -66,7 +81,6 @@ class Contenedor {
         }
     }
     
-    // VACIAR ARCHIVO
     async deleteAll() {
         fs.writeFile ( this.archivo, "", err => {
             if (err) {
@@ -80,35 +94,43 @@ class Contenedor {
 
 } // fin class Contenedor
 
+module.exports = Contenedor;
 
+/*
 console.clear();
 console.log( "------------------------------------------------" );
 console.log( "---------------------INICIO---------------------" );
 console.log( "------------------------------------------------" );
 
+
 ;(async () => {
-    const dbProductos = new Contenedor('Productos.txt')
     
-    /*const producto = {
+    const dbProductos = new Contenedor('Productos.txt')
+    /*
+    const producto = {
         title: 'Escuadra',
         price: 123.45,
         thumbnail: 'https://escuadra.jpg'
-    }*/
+    }
     
-    /* const producto = {
+    const producto = {
         title: 'Calculadora',
         price: 234.56,
         thumbnail: 'https://calculadora.jpg'
-    } */
+    }
     
     const producto = {
         title: 'Globo Terráqueo',
         price: 345.67,
         thumbnail: 'https://globoterr.jpg'
     }
-   
     await dbProductos.save(producto);
-  
+    */
+    /*
+    const productoRnd = await dbProductos.getRandom();
+    console.log(`>> Mostrar producto aleatorio: `,productoRnd);
+    */
+    /*
     const productoId = await dbProductos.getById(4);
     console.log(`>> Mostrar producto específico: `,productoId);
   
@@ -119,4 +141,5 @@ console.log( "------------------------------------------------" );
     await dbProductos.deleteById(5);
   
     //await dbProductos.deleteAll();
-})()
+    *//*
+})()*/
